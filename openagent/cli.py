@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 CLI do OpenAgent - Interface de Linha de Comando
 """
@@ -6,7 +7,13 @@ CLI do OpenAgent - Interface de Linha de Comando
 import argparse
 import sys
 import os
+import io
 from pathlib import Path
+
+# Configurar encoding para Windows
+if sys.platform == "win32":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 from .core import OpenAgent
 
@@ -114,20 +121,20 @@ def handle_model_operations(agent, args):
     """Lida com operações de modelos"""
     
     if args.search:
-        print(f"🔍 Buscando modelos: {args.search}")
+        print(f"[SEARCH] Buscando modelos: {args.search}")
         models = agent.search_models_interactive(args.search, args.source)
         if not models:
-            print("❌ Nenhum modelo encontrado.")
+            print("[ERROR] Nenhum modelo encontrado.")
             return False
         return True
     
     if args.download:
-        print(f"⬇️ Baixando modelo: {args.download}")
+        print(f"[DOWNLOAD] Baixando modelo: {args.download}")
         success = agent.download_model_interactive(args.download)
         return success
     
     if args.load:
-        print(f"🔄 Carregando modelo: {args.load}")
+        print(f"[LOAD] Carregando modelo: {args.load}")
         success = agent.load_model_interactive(args.load)
         return success
     
@@ -168,12 +175,12 @@ def main():
         
         # Modo servidor apenas
         if args.server_only:
-            print("🚀 Iniciando OpenAgent em modo servidor...")
+            print("[START] Iniciando OpenAgent em modo servidor...")
             if not agent.start_server():
-                print("❌ Falha ao iniciar servidor")
+                print("[ERROR] Falha ao iniciar servidor")
                 return 1
             
-            print(f"🖥️ Servidor rodando em http://{args.host}:{args.port}")
+            print(f"[SERVER] Servidor rodando em http://{args.host}:{args.port}")
             print("Pressione Ctrl+C para parar...")
             
             try:
@@ -181,36 +188,36 @@ def main():
                 while True:
                     time.sleep(1)
             except KeyboardInterrupt:
-                print("\n👋 Encerrando servidor...")
+                print("\n[STOP] Encerrando servidor...")
                 agent.stop_server()
                 return 0
         
         # Modo interativo (padrão)
         else:
-            print("🚀 Iniciando OpenAgent...")
+            print("[START] Iniciando OpenAgent...")
             
             if not agent.start_server():
-                print("❌ Falha ao iniciar servidor")
+                print("[ERROR] Falha ao iniciar servidor")
                 return 1
             
             try:
                 agent.interactive_shell()
             except KeyboardInterrupt:
-                print("\n👋 Até logo!")
+                print("\n[STOP] Até logo!")
             finally:
                 agent.stop_server()
         
         return 0
         
     except KeyboardInterrupt:
-        print("\n👋 Operação cancelada pelo usuário.")
+        print("\n[STOP] Operação cancelada pelo usuário.")
         return 0
     except Exception as e:
         if args.debug:
             import traceback
             traceback.print_exc()
         else:
-            print(f"❌ Erro: {e}")
+            print(f"[ERROR] Erro: {e}")
         return 1
 
 if __name__ == "__main__":

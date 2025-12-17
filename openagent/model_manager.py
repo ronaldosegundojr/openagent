@@ -54,9 +54,9 @@ class ModelManager:
                     if any(keyword in model_id.lower() 
                           for keyword in ["gguf", "ggml", "quantized", "q4", "q8", "q3"]):
                         
-                    capabilities = self._detect_model_capabilities(model_id, model.get("tags", []))
-                    
-                    filtered_models.append({
+                        capabilities = self._detect_model_capabilities(model_id, model.get("tags", []))
+                        
+                        filtered_models.append({
                         "id": model_id,
                         "name": model_id,
                         "description": model.get("description", ""),
