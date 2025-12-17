@@ -1,0 +1,342 @@
+# OpenAgent 🤖
+
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://python.org)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://github.com/openagent-ai/openagent)
+
+**Agente de IA Local 100% Open Source**
+
+OpenAgent é um sistema completo de agente LLM local, semelhante ao Opencode e GPTme, mas 100% independente e open source. Execute modelos de linguagem localmente com acesso completo ao sistema de arquivos, execução de comandos e processamento de multimídia.
+
+## 🚀 Instalação Rápida
+
+### Via pip (Recomendado)
+
+```bash
+pip install openagent
+```
+
+### Via GitHub
+
+```bash
+git clone https://github.com/openagent-ai/openagent.git
+cd openagent
+pip install -e .
+```
+
+## 🎮 Uso
+
+### Iniciar o OpenAgent
+
+```bash
+# Modo interativo (padrão)
+openagent
+
+# Apenas servidor API
+openagent --server-only
+
+# Servidor em porta personalizada
+openagent --port 8080
+```
+
+### Ajuda e Comandos
+
+```bash
+# Mostrar ajuda completa
+openagent --help
+
+# Versão
+openagent --version
+
+# Buscar modelos
+openagent --search mistral
+
+# Baixar modelo
+openagent --download TheBloke/Mistral-7B-Instruct-v0.2-GGUF
+
+# Listar modelos locais
+openagent --models
+
+# Status do sistema
+openagent --status
+```
+
+## 🌟 Características Principais
+
+- **🏠 100% Local**: Execute modelos LLM completamente offline
+- **🔧 Ferramentas Integradas**: Acesso a arquivos, comandos do sistema, imagens e mais
+- **📦 Multi-fonte**: Baixe modelos do HuggingFace e Ollama
+- **🎨 Multimodal**: Suporte a imagens, áudio e outros formatos
+- **⚡ API Compatível**: Interface compatível com OpenAI API
+- **🧠 Inteligente**: Detecção automática de capacidades dos modelos
+- **🔍 Busca Avançada**: Encontre modelos por capacidades (tools, reasoning, vision, etc)
+
+## 📋 Requisitos
+
+- Python 3.8 ou superior
+- 4GB+ RAM (depende do modelo)
+- Espaço em disco para modelos (2-40GB por modelo)
+
+## 🛠️ Comandos da CLI
+
+### Modos de Operação
+```bash
+openagent                    # Modo interativo
+openagent --server-only      # Apenas servidor
+openagent -i                 # Modo interativo (explícito)
+```
+
+### Operações de Modelos
+```bash
+openagent --search QUERY     # Buscar modelos
+openagent --download MODEL   # Baixar modelo
+openagent --load MODEL       # Carregar modelo
+openagent --models           # Listar locais
+```
+
+### Configuração
+```bash
+openagent --host 0.0.0.0    # Host do servidor
+openagent --port 8080        # Porta do servidor
+openagent --source ollama    # Fonte de modelos
+```
+
+### Informações
+```bash
+openagent --status           # Status do sistema
+openagent --version          # Versão
+openagent --debug            # Modo debug
+```
+
+## 🎯 Capacidades dos Modelos
+
+O OpenAgent detecta automaticamente as capacidades de cada modelo:
+
+- **🔧 Tools**: Modelos com function calling
+- **🧠 Reasoning**: Modelos com capacidade de raciocínio
+- **👁️ Vision**: Modelos com processamento de imagens
+- **💻 Code**: Modelos especializados em código
+- **💬 Chat**: Modelos otimizados para conversação
+- **🎨 Multimodal**: Modelos com múltiplos tipos de entrada
+
+### Exemplos de Busca
+
+```bash
+# Buscar modelos com tools
+openagent --search tools
+
+# Buscar modelos com visão
+openagent --search vision
+
+# Buscar modelos para código
+openagent --search code
+
+# Buscar modelos específicos
+openagent --search mistral
+openagent --search llama
+openagent --search "reasoning"
+```
+
+## 🔧 Ferramentas Integradas
+
+### Sistema de Arquivos
+- `read_file` - Ler conteúdo de arquivos
+- `write_file` - Criar ou sobrescrever arquivos
+- `list_directory` - Listar conteúdo de diretórios
+- `delete_file` - Excluir arquivos
+- `copy_file` - Copiar arquivos
+- `move_file` - Mover arquivos
+
+### Sistema
+- `execute_command` - Executar comandos do sistema
+- `get_system_info` - Obter informações do sistema
+- `get_working_directory` - Obter diretório atual
+
+### Mídia
+- `encode_image_to_base64` - Codificar imagens
+- `get_image_info` - Obter informações de imagens
+
+### Busca
+- `search_files` - Buscar arquivos por padrão
+- `search_in_files` - Buscar texto dentro de arquivos
+
+## 🔌 API REST
+
+O OpenAgent expõe uma API compatível com OpenAI:
+
+### Chat Completions
+
+```bash
+curl -X POST http://localhost:1234/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "mistral-7b",
+    "messages": [
+      {"role": "user", "content": "Olá, como você está?"}
+    ]
+  }'
+```
+
+### Listar Modelos
+
+```bash
+curl http://localhost:1234/v1/models
+```
+
+## 📁 Estrutura de Diretórios
+
+```
+~/.openagent/              # Diretório de configuração
+├── openagent.json         # Configuração principal
+├── models/                # Modelos baixados
+│   ├── config.json       # Configuração dos modelos
+│   └── [model_files]     # Arquivos dos modelos
+└── logs/                 # Logs do sistema
+```
+
+## ⚙️ Configuração
+
+O arquivo `~/.openagent/openagent.json` contém as configurações:
+
+```json
+{
+  "server": {
+    "host": "127.0.0.1",
+    "port": 1234
+  },
+  "ui": {
+    "theme": "dark",
+    "show_models_info": true
+  },
+  "models": {
+    "auto_load_last": true,
+    "preferred_source": "all"
+  }
+}
+```
+
+## 🐛 Solução de Problemas
+
+### Problemas Comuns
+
+**1. Erro: "Nenhum modelo carregado"**
+```bash
+# Verifique os modelos disponíveis
+openagent --models
+
+# Baixe um modelo
+openagent --search mistral
+openagent --download [modelo_selecionado]
+```
+
+**2. Erro: "Servidor não iniciou"**
+```bash
+# Verifique se a porta está disponível
+openagent --port 1235
+
+# Ou use outra porta
+openagent --port 8080
+```
+
+**3. Erro: "Módulo não encontrado"**
+```bash
+# Reinstale o pacote
+pip install --upgrade openagent
+
+# Ou instale as dependências manualmente
+pip install flask flask-cors requests Pillow psutil
+```
+
+**4. Download lento de modelos**
+- Verifique sua conexão com a internet
+- Tente usar VPN se tiver problemas com HuggingFace
+- Considere baixar modelos menores primeiro
+
+### Logs e Debug
+
+Para habilitar modo debug:
+
+```bash
+openagent --debug
+```
+
+Os logs são salvos em `~/.openagent/logs/`.
+
+## 🖥️ Exemplos de Uso
+
+### Shell Interativo
+
+```bash
+$ openagent
+🚀 OpenAgent - Shell Interativo
+==================================================
+Comandos disponíveis:
+  /search [query] - Buscar modelos
+  /download [model] - Baixar modelo
+  /load [model] - Carregar modelo
+  /models - Listar modelos locais
+  /status - Mostrar status
+  /help - Ajuda
+  /quit - Sair
+==================================================
+
+🧑 Você: /search mistral
+🔍 Buscando modelos...
+
+📋 Encontrados 5 modelos:
+
+ 1. 📦 TheBloke/Mistral-7B-Instruct-v0.2-GGUF
+     📝 Modelo Mistral 7B otimizado para inferência local
+     📊 4.1GB | ⬇️ 1,000,000 downloads | ❤️ 5,000 likes
+     🏷️ Huggingface | 🔧 Tools | 🧠 Reasoning | 💻 Code | 💬 Chat
+
+🧑 Você: Crie um arquivo Python com hello world
+🤖 OpenAgent: Vou criar um arquivo Python com hello world para você.
+
+🛠️ Arquivo criado com sucesso: /path/to/hello.py
+
+🧑 Você: Execute o arquivo hello.py
+🤖 OpenAgent: Executando o arquivo hello.py...
+
+🛠️ Comando executado com sucesso. Saída:
+Hello, World!
+```
+
+### Modo Servidor
+
+```bash
+$ openagent --server-only --port 8080
+🚀 Iniciando OpenAgent em modo servidor...
+🖥️ Servidor rodando em http://127.0.0.1:8080
+Pressione Ctrl+C para parar...
+```
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Por favor:
+
+1. Fork o repositório
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
+3. Commit suas mudanças (`git commit -am 'Adiciona nova funcionalidade'`)
+4. Push para a branch (`git push origin feature/nova-funcionalidade`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+## 🙏 Agradecimentos
+
+- HuggingFace pela API de modelos
+- Ollama pelos modelos open source
+- Comunidade Python pelas ferramentas incríveis
+
+## 📞 Suporte
+
+- 📧 Email: support@openagent.ai
+- 💬 Discord: [discord.gg/openagent](https://discord.gg/openagent)
+- 🐛 Issues: [GitHub Issues](https://github.com/openagent-ai/openagent/issues)
+
+---
+
+**OpenAgent** - Sua IA local, suas regras! 🚀

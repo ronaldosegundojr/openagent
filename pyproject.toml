@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openagent"
+version = "1.0.0"
+description = "Agente de IA Local 100% Open Source"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "OpenAgent Team", email = "contact@openagent.ai"}
+]
+maintainers = [
+    {name = "OpenAgent Team", email = "contact@openagent.ai"}
+]
+keywords = ["ai", "llm", "agent", "local", "openai-compatible", "tools", "multimodal"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "flask>=2.3.3",
+    "flask-cors>=4.0.0",
+    "requests>=2.31.0",
+    "Pillow>=10.0.1",
+    "psutil>=5.9.5",
+    "pathlib2>=2.3.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/openagent-ai/openagent"
+Documentation = "https://github.com/openagent-ai/openagent/wiki"
+Repository = "https://github.com/openagent-ai/openagent"
+"Bug Reports" = "https://github.com/openagent-ai/openagent/issues"
+
+[project.scripts]
+openagent = "openagent.cli:main"
+
+[tool.setuptools]
+packages = ["openagent"]
+
+[tool.setuptools.package-data]
+openagent = ["config/*", "templates/*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
