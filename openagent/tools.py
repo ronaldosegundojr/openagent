@@ -131,6 +131,28 @@ class FileSystemTools:
         except Exception as e:
             return f"Erro ao mover arquivo: {str(e)}"
 
+    @staticmethod
+    def edit_file(path: str, search_text: str, replace_text: str) -> str:
+        """Substitui um texto específico dentro de um arquivo"""
+        try:
+            if not os.path.exists(path):
+                return f"Erro: Arquivo {path} não encontrado."
+            
+            with open(path, "r", encoding="utf-8") as f:
+                content = f.read()
+            
+            if search_text not in content:
+                return f"Erro: Texto '{search_text}' não encontrado no arquivo."
+            
+            new_content = content.replace(search_text, replace_text)
+            
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+                
+            return f"Arquivo {path} editado com sucesso: '{search_text}' -> '{replace_text}'"
+        except Exception as e:
+            return f"Erro ao editar arquivo: {str(e)}"
+
 class SystemTools:
     """Ferramentas de sistema e execução de comandos"""
     
@@ -263,6 +285,14 @@ class MediaTools:
         except Exception as e:
             return {"error": f"Erro ao obter informações da imagem: {str(e)}"}
 
+    @staticmethod
+    def transcribe_audio(audio_path: str) -> str:
+        """Transcreve um arquivo de áudio para texto (Simulado por agora)"""
+        try:
+            return f"Transcrição simulada do áudio {audio_path}: 'Esta é uma mensagem de voz do usuário pedindo para listar os arquivos.'"
+        except Exception as e:
+            return f"Erro ao transcrever áudio: {str(e)}"
+
 class SearchTools:
     """Ferramentas de busca"""
     
@@ -381,6 +411,19 @@ class ToolRegistry:
             }
         }
         
+        self.tools["edit_file"] = {
+            "description": "Edita um arquivo existente substituindo um texto por outro",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "Caminue do arquivo"},
+                    "search_text": {"type": "string", "description": "Texto a ser buscado"},
+                    "replace_text": {"type": "string", "description": "Texto de substituição"}
+                },
+                "required": ["path", "search_text", "replace_text"]
+            }
+        }
+
         self.tools["search_files"] = {
             "description": "Busca arquivos por padrão",
             "parameters": {
@@ -391,6 +434,17 @@ class ToolRegistry:
                     "recursive": {"type": "boolean", "default": True}
                 },
                 "required": ["pattern"]
+            }
+        }
+
+        self.tools["transcribe_audio"] = {
+            "description": "Converte um arquivo de áudio (wav, mp3) em texto",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "audio_path": {"type": "string", "description": "Caminho do arquivo de áudio"}
+                },
+                "required": ["audio_path"]
             }
         }
     
